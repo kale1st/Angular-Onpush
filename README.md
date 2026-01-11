@@ -1,27 +1,60 @@
-# Onpush
+# Angular Change Detection Demo
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.11.
+A practical demonstration project exploring Angular's change detection strategies: Default, `runOutsideAngular()`, and `OnPush`.
 
-## Development server
+## 🎯 Purpose
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+This project accompanies the article **"Angular Change Detection: What Happens Before You Ever Think About OnPush"** and demonstrates three key concepts:
 
-## Code scaffolding
+1. **Default Change Detection** - How Angular checks all components on every event
+2. **Zone Control** - Using `runOutsideAngular()` to prevent unnecessary checks
+3. **OnPush Strategy** - Optimizing component updates with selective change detection
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## 🚀 Quick Start
 
-## Build
+```bash
+npm install
+npm start
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Navigate to `http://localhost:4200/`
 
-## Running unit tests
+## 📋 What to Test
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Part 1: Default Behavior (AppComponent)
+- Click "Increment Counter" → Watch console for `[Messages] "debugOutput" binding re-evaluated`
+- Wait 4 seconds → Timer inside Angular triggers change detection
+- Wait 5 seconds → Timer outside Angular runs without triggering change detection
 
-## Running end-to-end tests
+### Part 2: OnPush Demo (Parent/Child Components)
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+**Scenario 1:** Click "Increment Counter"
+- ✅ Console shows: `Parent checked`, `Child checked`
+- ✅ UI updates normally
 
-## Further help
+**Scenario 2:** Click "Start Timer"
+- ⚠️ Console shows: `Timer updated to: 1, 2, 3...`
+- ❌ UI stays frozen at `Timer: 0`
+- **Why?** OnPush skips checking because `setInterval` isn't a component event
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+**Scenario 3:** Click "Increment Counter" while timer runs
+- 🎯 Timer suddenly jumps from 0 to current value
+- **Reveals:** Data was updating in memory all along, UI just "catches up"
+
+## 🔍 Key Insight
+
+OnPush doesn't stop your code from running. It controls **when Angular checks if the UI needs updating**. Without valid triggers (events, input changes), the UI stays frozen even though data changes.
+
+## 🛠️ Built With
+
+- Angular 19
+- TypeScript
+- Standalone Components
+
+## 📖 Related Article
+
+[Link to Medium article when published]
+
+## 📝 License
+
+MIT
